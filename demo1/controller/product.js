@@ -1,18 +1,26 @@
 import Product from "../model/product";
-
+import Category from "../model/category";
 
 export const ListProduct = async (req, res) => {
+    const { _page = 1, _limit = 10, _sort = "createAt", _order = "asc" } = req.query;
+    const options = {
+        limit: 10,
+        page: _page,
+        limit: _limit,
+        sort: {
+            [_sort]: _order === "desc" ? -1 : 1,
+        }
+    }
     try {
-        const data = await Product.find();
-        if (!data) {
+        const { docs: products } = await Product.paginate({}, options)
+        if (!products) {
             res.status(400).json({
                 message: "Không có sản phẩm nòa",
             })
         }
         else {
             res.status(200).json({
-                message: "List product",
-                data: data,
+                data: products,
             })
         }
     } catch (error) {
@@ -23,8 +31,8 @@ export const ListProduct = async (req, res) => {
 }
 export const ListOneProduct = async (req, res) => {
     try {
-        const data = await Product.findOne({ _id: req.params.id }).populate("categoryId");
-        if (!data) {
+        const products = await Product.findOne({ _id: req.params.id }).populate("categoryId");
+        if (!products) {
             res.status(400).json({
                 message: "Không có sản phẩm nòa",
             })
@@ -32,7 +40,7 @@ export const ListOneProduct = async (req, res) => {
         else {
             res.status(200).json({
                 message: "List product",
-                data: data,
+                data: products,
             })
         }
     } catch (error) {
@@ -43,18 +51,21 @@ export const ListOneProduct = async (req, res) => {
 }
 export const Addproduct = async (req, res) => {
     try {
-        const data = await Product.create(req.body);
-        if (!data) {
+        const products = await Product.create(req.body);
+        if (!products) {
             res.status(400).json({
                 message: "Không có sản phẩm nòa",
             })
         }
-        else {
-            res.status(200).json({
-                message: "more product success",
-                data: data,
-            })
-        }
+        await Category.findByIdAndUpdate(data.categoryId, {
+            $addToSet: {
+                products: products._id,
+            },
+        })
+        return res.status(200).json({
+            message: "more product success",
+            data: products,
+        })
     } catch (error) {
         res.status(500).json({
             message: error,

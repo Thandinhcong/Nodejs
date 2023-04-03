@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 const userSchema = mongoose.Schema({
     name: {
@@ -10,6 +11,10 @@ const userSchema = mongoose.Schema({
     },
     password: {
         type: String,
+        require: true
+    },
+    number: {
+        type: Number,
         require: true
     }
     ,

@@ -2,6 +2,24 @@ import User from "../model/user";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { signinSchema, signupSchema } from "../schemas/auth";
+export const getUser = async (req, res) => {
+    try {
+        const users = await User.find();
+        if (!users) {
+            return res.status(400).json({
+                message: "không có tài khoản nào",
+            })
+        }
+        return res.status(200).json({
+
+            users,
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "Lỗi server",
+        })
+    }
+}
 export const signup = async (req, res) => {
     try {
         //validate đầu vào

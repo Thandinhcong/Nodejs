@@ -21,17 +21,13 @@ export const getAllCate = async (req, res) => {
 
 export const getOneCate = async (req, res) => {
     try {
-        const categorys = await Category.findOne({ _id: req.params.id });
+        const categorys = await Category.findById(req.params.id).populate("products");
         if (!categorys) {
             return res.status(400).json({
                 message: "Không có danh mục nào",
             })
         }
-        const product = await Product.find({ categoryId: req.params.id })
-        res.status(200).json({
-            ...categorys.toObject(),
-            product,
-        })
+        res.status(201).json(categorys)
     } catch (error) {
         return res.status(500).json({
             message: error,

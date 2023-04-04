@@ -20,7 +20,7 @@ export const ListProduct = async (req, res) => {
         }
         else {
             res.status(200).json({
-                data: products,
+                products,
             })
         }
     } catch (error) {
@@ -40,7 +40,7 @@ export const ListOneProduct = async (req, res) => {
         else {
             res.status(200).json({
                 message: "List product",
-                data: products,
+                products,
             })
         }
     } catch (error) {

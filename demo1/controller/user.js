@@ -20,6 +20,25 @@ export const getUser = async (req, res) => {
         })
     }
 }
+export const checkEmail = async (req, res) => {
+    try {
+        const email = req.params.email;
+        const user = await User.findOne({ email });
+        if (user) {
+            res.json({
+                exists: true,
+                message: 'Email already exists'
+            });
+        } else {
+            res.json({
+                exists: false,
+                message: 'Email is available'
+            });
+        }
+    } catch (error) {
+
+    }
+}
 export const signup = async (req, res) => {
     try {
         //validate đầu vào

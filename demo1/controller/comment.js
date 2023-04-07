@@ -44,7 +44,7 @@ export const AddComment = async (req, res) => {
         const comment = await Comment.create(req.body);
         await Product.findByIdAndUpdate(comment.productId, {
             $addToSet: {
-                data: comment._id,
+                comments: comment._id,
             },
         });
         if (!comment) {

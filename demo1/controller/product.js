@@ -2,9 +2,9 @@ import Product from "../model/product";
 import Category from "../model/category";
 
 export const ListProduct = async (req, res) => {
-    const { _page = 1, _limit = 10, _sort = "createAt", _order = "asc" } = req.query;
+    const { _page = 1, _limit = 20, _sort = "createAt", _order = "asc" } = req.query;
     const options = {
-        limit: 10,
+        limit: 20,
         page: _page,
         limit: _limit,
         sort: {
@@ -31,7 +31,9 @@ export const ListProduct = async (req, res) => {
 }
 export const ListOneProduct = async (req, res) => {
     try {
-        const products = await Product.findOne({ _id: req.params.id }).populate("categoryId");
+        const products = await Product.findOne({ _id: req.params.id })
+            .populate("categoryId")
+            .populate("comments");
         if (!products) {
             res.status(400).json({
                 message: "Không có sản phẩm nòa",
@@ -52,24 +54,28 @@ export const ListOneProduct = async (req, res) => {
 export const Addproduct = async (req, res) => {
     try {
         const products = await Product.create(req.body);
-        if (!products) {
-            res.status(400).json({
-                message: "Không có sản phẩm nòa",
-            })
-        }
-        await Category.findByIdAndUpdate(data.categoryId, {
+        await Category.findByIdAndUpdate(products.categoryId, {
             $addToSet: {
                 products: products._id,
             },
-        })
-        return res.status(200).json({
-            message: "more product success",
-            data: products,
-        })
+        });
+        if (!products) {
+            return res.status(400).json({
+                message: "Không thể tạo sản phẩm"
+            })
+        } else {
+
+            return res.status(201).json({
+                message: "Thêm sản phẩm thành công",
+                data: products,
+            });
+        }
     } catch (error) {
-        res.status(500).json({
-            message: error,
-        })
+        console.error(error);
+        return res.status(500).json({
+            message: "Lỗi xảy ra khi tạo sản phẩm",
+            error: error.message,
+        });
     }
 }
 export const UpdateProduct = async (req, res) => {

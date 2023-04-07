@@ -20,6 +20,24 @@ export const getUser = async (req, res) => {
         })
     }
 }
+export const getOneUser = async (req, res) => {
+    try {
+        const users = await User.findOne({ _id: req.pamams.id }).populate("commentId");
+        if (!users) {
+            return res.status(400).json({
+                message: "không có tài khoản nào",
+            })
+        }
+        return res.status(200).json({
+
+            users,
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "Lỗi server",
+        })
+    }
+}
 export const checkEmail = async (req, res) => {
     try {
         const email = req.params.email;
@@ -34,6 +52,22 @@ export const checkEmail = async (req, res) => {
                 exists: false,
                 message: 'Email is available'
             });
+        }
+    } catch (error) {
+
+    }
+}
+export const deleteUser = async (req, res) => {
+    try {
+        const users = await User.findByIdAndRemove(req.params.id);
+        if (!users) {
+            return res.status(400).json({
+                message: "Khoogn có tài khoản nào",
+            })
+        } else {
+            return res.status(200).json({
+                message: "Xóa thành công tài khoản",
+            })
         }
     } catch (error) {
 

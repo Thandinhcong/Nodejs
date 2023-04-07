@@ -16,7 +16,7 @@ export const signupSchema = joi.object({
     }),
     number: joi.number().min(9).required().messages({
         "string.empty": 'Trường "số điện thoại" không được để trống',
-        "string.min": 'Trường "số đinệ thoại" phải có ít nhất 9 ký tự',
+        "string.min": 'Trường "số đinệ thoại" phải có ít nhất 9 ký tự , tối đa 11 kí tự',
         "any.required": "Trường phonelà bắt buộc",
     }),
     confirmPassword: joi.string().valid(joi.ref("password")).required().messages({

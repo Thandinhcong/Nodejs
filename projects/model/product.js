@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
-import { SchemaComment } from "./comment";
 const productSchema = mongoose.Schema({
     name: {
         type: String,
@@ -23,6 +22,7 @@ const productSchema = mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: "Category",
     },
+    image: String,
     comments: [{ type: mongoose.Types.ObjectId, ref: "Comment" }],
 
 },

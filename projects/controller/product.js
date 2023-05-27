@@ -8,7 +8,8 @@ const schemaProduct = Joi.object({
     description: Joi.string().required("Nhập mô tả"),
     original_price: Joi.number(),
     salient_features: Joi.string().required(),
-    categoryId: Joi.string()
+    categoryId: Joi.string(),
+    image: Joi.string()
 })
 
 

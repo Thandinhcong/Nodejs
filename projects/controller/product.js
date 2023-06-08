@@ -9,7 +9,8 @@ const schemaProduct = Joi.object({
     original_price: Joi.number(),
     salient_features: Joi.string().required(),
     categoryId: Joi.string(),
-    image: Joi.string()
+    image: Joi.string(),
+    brand: Joi.string()
 })
 
 

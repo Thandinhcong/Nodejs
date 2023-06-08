@@ -24,7 +24,10 @@ const productSchema = mongoose.Schema({
     },
     image: String,
     comments: [{ type: mongoose.Types.ObjectId, ref: "Comment" }],
-
+    brand: {
+        type: String,
+        require: true,
+    },
 },
     { timestamps: true, versionKey: false }
 )
